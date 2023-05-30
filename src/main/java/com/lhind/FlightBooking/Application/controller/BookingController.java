@@ -25,6 +25,7 @@ public class BookingController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<BookingDTO>> getUserBookings(
             @PathVariable Long userId,
+
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int pageSize
     ) {

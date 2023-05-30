@@ -5,6 +5,7 @@ import com.lhind.FlightBooking.Application.model.dto.UserDTO;
 import com.lhind.FlightBooking.Application.model.entity.UserEntity;
 import com.lhind.FlightBooking.Application.services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -30,19 +31,20 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @PreAuthorize(value="hasAnyRole('ADMIN')")
     @GetMapping("/{email}")
     public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
         UserDTO user = userService.getUserByEmail(email).map(userMapper::toDto).orElse(null);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
+    @PostMapping("/CreateNewUser")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
         UserDTO createdUserDto = userMapper.toDto(userService.createUser(userMapper.toEntity(userDto)));
         return ResponseEntity.created(URI.create("/users/" + createdUserDto.getId())).body(createdUserDto);
     }
 
-    @PutMapping
+    @PutMapping("/updateUser")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDto) {
         UserDTO updatedUserDto = userMapper.toDto(userService.updateUser(userMapper.toEntity(userDto)));
         return ResponseEntity.ok(updatedUserDto);
