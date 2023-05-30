@@ -58,5 +58,4 @@ public class FlightServiceTest {
         Assert.assertEquals(flightDto.getFlightDate(), createdFlight.getFlightDate());
         Assert.assertEquals(flightDto.getDepartureTime(), createdFlight.getDepartureTime());
     }
-}
-*/
+}*/
