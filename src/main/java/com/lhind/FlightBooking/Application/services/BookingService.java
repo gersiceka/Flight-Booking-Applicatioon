@@ -1,6 +1,8 @@
 package com.lhind.FlightBooking.Application.services;
 
+import com.lhind.FlightBooking.Application.model.dto.BookingDTO;
 import com.lhind.FlightBooking.Application.model.entity.Booking;
+import com.lhind.FlightBooking.Application.model.entity.Pagination;
 import com.lhind.FlightBooking.Application.model.entity.UserEntity;
 import com.lhind.FlightBooking.Application.repository.BookingRepository;
 import lombok.AllArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,5 +68,16 @@ public class BookingService {
         return false;
     }
 
+    public List<BookingDTO> getUserBookings(Long id, Pagination pagination) {
+        List<BookingDTO> userBookings = new ArrayList<>();
+        int startIndex = (pagination.getPage() - 1) * pagination.getPageSize();
+        int endIndex = Math.min(startIndex + pagination.getPageSize(), userBookings.size());
+
+        if (startIndex >= userBookings.size()) {
+            return new ArrayList<>();
+        }
+
+        return userBookings.subList(startIndex, endIndex);
+    }
 }
 

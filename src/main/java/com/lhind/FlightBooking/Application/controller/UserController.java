@@ -38,24 +38,28 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/CreateNewUser")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping("/createUser")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
         UserDTO createdUserDto = userMapper.toDto(userService.createUser(userMapper.toEntity(userDto)));
         return ResponseEntity.created(URI.create("/users/" + createdUserDto.getId())).body(createdUserDto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/updateUser")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDto) {
         UserDTO updatedUserDto = userMapper.toDto(userService.updateUser(userMapper.toEntity(userDto)));
         return ResponseEntity.ok(updatedUserDto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id) {
         Optional<UserEntity> userOptional = userService.findById(id);
